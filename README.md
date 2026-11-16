@@ -124,6 +124,6 @@
 
 本地完整检查：`./gradlew test build`；桌面仿真：`./gradlew simulateJava`。单元测试检查目标限幅与非有限输入处理；它不能替代 Tuner 连通性和闭环动态的人工验收。
 
-本次编辑环境只有 JRE、没有 Java 编译器，`test` 在 `compileJava` 的工具链检查处停止；另一轮 `test build` 还遇到依赖仓库连接失败。因此**未声称编译通过，也未在该环境完成 Tuner X 图形界面联调**。请在 WPILib 开发环境执行以上命令后使用。
+2026-11-16 已使用 Eclipse Temurin JDK 17.0.21 完成 `clean test build`：编译、打包与 1 项 JUnit 测试全部通过。还进行了短时 `simulateJava` 启动检查，机器人程序启动完成，Phoenix 仿真 CAN 总线与 NetworkTables 正常初始化。该检查在无图形显示的环境运行，**尚未完成 Simulation GUI、Phoenix Tuner X 联调或闭环动态验收**；这些仍需按上面的实验步骤在桌面环境验证。
 
 参考：[CTRE 仿真](https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/simulation/simulation-intro.html) · [Tuner 连接](https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/connecting.html) · [闭环与重力前馈](https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/device-specific/talonfx/closed-loop-requests.html)

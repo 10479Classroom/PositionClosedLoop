@@ -9,17 +9,6 @@
 - WPILib 2026.2.1 / Phoenix 6 26.3.0；初始增益为零。
 - 使用 `PositionVoltage`、Slot 0、`Elevator_Static`；kI、kS、kV、kA 保持为零。
 
-## 启动
-
-1. 用 WPILib VS Code 打开项目，运行 **Simulate Robot Code**，选择 Simulation GUI。
-2. Tuner X 连接 **localhost:1250**，选择 **Talon FX ID 1**。
-3. 打开 Glass，连接本机 NetworkTables，在 `SmartDashboard` 下操作：
-   - `Elevator/TargetMeters`：目标高度（m）。
-   - `Elevator/ResetToMidHeight`：Disabled 时设为 true，复位到 0.6 m。
-   - `Elevator/HeightMeters`：实际高度。
-4. 在 Simulation GUI 中选择 **Teleoperated / Enabled**。Tuner 只用于修改 Slot 0 参数并 Apply、绘制曲线，不同时发送控制命令。
-
-也可运行 `./gradlew simulateJava`（Windows：`gradlew.bat simulateJava`）。
 
 ## 作业任务
 
@@ -34,7 +23,7 @@
 
 ## 验收与提交
 
-教学目标：每次阶跃 **2 秒内进入 ±0.02 m**，并保持到本段结束；超调不超过阶跃幅值的 **10%**，无持续振荡、不碰限位。未达标也应记录并分析原因。
+教学目标：每次设置高度后 **2 秒内进入 ±0.02 m**，并保持到本段结束；超调不超过阶跃幅值的 **10%**，无持续振荡、不超过限位。
 
 提交：
 - 写入基准最终增益的 `Robot.java` 和 Tuner 参数截图。

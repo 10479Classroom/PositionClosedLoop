@@ -1,6 +1,6 @@
 # 家庭作业：电梯闭环调参
 
-用 **Phoenix Tuner X** 调整电梯仿真的 kG、kP、kD，使电梯稳定到达目标高度。无需真实硬件或手柄，**不要部署到实机**。
+直接使用 **PositionVoltage 位置闭环电压控制**，用 **Phoenix Tuner X** 调整 kG、kP、kD，使电梯稳定到达目标高度。无需真实硬件或手柄，**不要部署到实机**。
 
 ## 模型
 
@@ -15,8 +15,6 @@
 2. Tuner X 连接 **localhost:1250**，选择 **Talon FX ID 1**。
 3. 打开 Glass，连接本机 NetworkTables，在 `SmartDashboard` 下操作：
    - `Elevator/TargetMeters`：目标高度（m）。
-   - `Elevator/OpenLoop`：开环电压模式开关。
-   - `Elevator/OpenLoopVolts`：开环电压（V）。
    - `Elevator/ResetToMidHeight`：Disabled 时设为 true，复位到 0.6 m。
    - `Elevator/HeightMeters`：实际高度。
 4. 在 Simulation GUI 中选择 **Teleoperated / Enabled**。Tuner 只用于修改 Slot 0 参数并 Apply、绘制曲线，不同时发送控制命令。
@@ -25,8 +23,8 @@
 
 ## 作业任务
 
-1. **调 kG**：Disabled 时开启开环并复位；Enabled 后从 0 V 逐渐增加电压，找出电梯在行程中部悬停的电压，填入 kG。每次试验先重新复位，不要在底部判断悬停。
-2. **调 kP、kD**：关闭开环，依次设置目标 `0.30 → 1.00 → 0.60 → 0.30 m`，每段保持至少 4 秒。先调 kP，再按需加 kD，每次只改一个参数，记录目标与实际位置曲线。
+1. **调 kP、kG**：目标设为 0.6 m，从较小的 kP（如 0.05 V/圈）开始，让电梯接近目标；再逐步调整 kG 补偿重力、减小稳态误差。始终使用 PositionVoltage，不切换开环。不要在底部判断补偿是否合适。
+2. **调 kP、kD**：依次设置目标 `0.30 → 1.00 → 0.60 → 0.30 m`，每段保持至少 4 秒。先调 kP，再按需加 kD，每次只改一个参数，记录目标与实际位置曲线。
 3. **对比实验**：在 `Robot.java` 中分别改为 **12 kg / 10:1** 和 **8 kg / 5:1**。每次先用基准增益测试，再重新调参，比较高度响应。
 
 注意：

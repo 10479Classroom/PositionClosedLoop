@@ -11,7 +11,6 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.TalonFXSimState;
@@ -35,7 +34,6 @@ public class Robot extends TimedRobot {
   private final TalonFX m_fx = new TalonFX(1, new CANBus("canivore"));
   private final PositionVoltage m_positionVoltage = new PositionVoltage(0).withSlot(0).withEnableFOC(false);
   private final NeutralOut m_brake = new NeutralOut();
-  private final VoltageOut m_voltage = new VoltageOut(0).withEnableFOC(false);
   private final Mechanisms m_mechanism = new Mechanisms();
 
   private final ElevatorSim m_elevatorSim = new ElevatorSim(
@@ -76,8 +74,6 @@ public class Robot extends TimedRobot {
       System.out.println("Could not apply configs, error code: " + status);
     }
     SmartDashboard.putNumber("Elevator/TargetMeters", 0.6);
-    SmartDashboard.putBoolean("Elevator/OpenLoop", false);
-    SmartDashboard.putNumber("Elevator/OpenLoopVolts", 0.0);
     SmartDashboard.putBoolean("Elevator/ResetToMidHeight", false);
   }
 
@@ -96,12 +92,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_targetHeightMeters = safeTarget(
         SmartDashboard.getNumber("Elevator/TargetMeters", m_targetHeightMeters), m_targetHeightMeters);
-    if (SmartDashboard.getBoolean("Elevator/OpenLoop", false)) {
-      double volts = SmartDashboard.getNumber("Elevator/OpenLoopVolts", 0.0);
-      m_fx.setControl(m_voltage.withOutput(Double.isFinite(volts) ? MathUtil.clamp(volts, -8, 8) : 0));
-    } else {
-      m_fx.setControl(m_positionVoltage.withPosition(m_targetHeightMeters * kRotationsPerMeter));
-    }
+    m_fx.setControl(m_positionVoltage.withPosition(m_targetHeightMeters * kRotationsPerMeter));
   }
 
   static double safeTarget(double requested, double previous) {
